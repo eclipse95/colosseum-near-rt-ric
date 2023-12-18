@@ -15,7 +15,7 @@ This work was partially supported by the U.S. National Science Foundation under 
 This repository is organized as follows
 
 ```
-root 
+/root/radio_code/colosseum-near-rt-ric 
 |
 └──setup-scripts
 |   |
@@ -44,10 +44,10 @@ root
 
 ### Quick start
 
-We provide a Colosseum LXC container that contains this repository, its prerequisites, and base docker images. The container `coloran-near-rt-ric` can be found among the images available for Colosseum users. The default username and password are `root` and `ChangeMe`.
+We provide a Colosseum LXC container that contains this repository, its prerequisites, and base docker images. The container `coloran-near-rt-ric-prebuilt` can be found among the images available for Colosseum users. The default username and password are `root` and `ChangeMe`.
 
 From the `setup-scripts` directory:
-- Build, configure, and start the near-real-time RIC Docker containers: `./setup-ric.sh ric-network-interface`
+- Build, configure, and start the near-real-time RIC Docker containers: `./setup-ric.sh ric-network-interface`, where `ric-network-interface` is the interface from which you want to expose the RIC E2 termination (e.g., `col0` or `can0` in Colosseum).
 - Connect the RAN node through the E2 termination as explained [here](https://github.com/wineslab/colosseum-scope-e2)
 - Get the gNB ID (see section below) and replace it in the `start-xapp.sh` script
 - Configure and start the xApp: `./start-xapp.sh`
@@ -88,6 +88,6 @@ An easy way to derive the gNB ID is the following. From the `setup-scripts` dire
 
 The sample xApp provided in this repository connects to the [SCOPE](https://github.com/wineslab/colosseum-scope) RAN environment through the following [E2 termination](https://github.com/wineslab/colosseum-scope-e2).
 After the near-real-time RIC has successfully started, the DU connected to it, and the xApp has been properly configured and started (see "Quick start" section above):
-- Enter the xApp docker container (named `sample-xapp-24` by default): `docker exec -it sample-xapp-24`
+- Enter the xApp docker container (named `sample-xapp-24` by default): `docker exec -it sample-xapp-24 bash`
 - Move to the `/home/sample-xapp` directory inside the Docker container: `cd /home/sample-xapp`
 - Run the xApp logic: `./run_xapp.sh`. This script will open a socket between the sample Python script in the `sample-xapp` directory (which by defaults prints the data received from the RAN node) and the service model connector of the `xapp-sm-connector` directory, which performs ASN.1 encoding and decoding of E2AP messages. Then, the xApp will subscribe to the RAN node specified at container startup time through the gNB ID, and receive a RIC Indication Message with a data report from the RAN node with the periodicity of 250 ms.
